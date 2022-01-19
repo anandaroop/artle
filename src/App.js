@@ -9,7 +9,6 @@ import { ReactComponent as Settings } from './data/Settings.svg'
 import { SettingsModal } from './components/SettingsModal'
 import answers from './data/answers'
 import { useLocalStorage } from './hooks/useLocalStorage'
-import words from './data/words'
 
 const state = {
   playing: 'playing',
@@ -120,7 +119,8 @@ function App() {
 
   const isValidWord = (word) => {
     if (word.length < 5) return false
-    return words[word.toLowerCase()]
+    return true
+    // return words[word.toLowerCase()]
   }
 
   const onEnterPress = () => {
@@ -286,7 +286,7 @@ function App() {
             <Settings />
           </button>
           <h1 className="flex-1 text-center text-xl xxs:text-2xl sm:text-4xl tracking-wide font-bold font-righteous">
-            WORD MASTER
+            ARTLE
           </h1>
           <button
             type="button"

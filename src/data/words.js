@@ -5634,6 +5634,7 @@ const words = {
   otter: true,
   ottos: true,
   ought: true,
+  ouija: true,
   ounce: true,
   ouphe: true,
   ouphs: true,
