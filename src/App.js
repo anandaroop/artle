@@ -8,6 +8,7 @@ import { Keyboard } from './components/Keyboard'
 import { ReactComponent as Settings } from './data/Settings.svg'
 import { SettingsModal } from './components/SettingsModal'
 import answers from './data/answers'
+import words from './data/words'
 import { useLocalStorage } from './hooks/useLocalStorage'
 
 const state = {
@@ -49,11 +50,20 @@ function App() {
   const [answer, setAnswer] = useLocalStorage('stateAnswer', initialStates.answer())
   const [gameState, setGameState] = useLocalStorage('stateGameState', initialStates.gameState)
   const [board, setBoard] = useLocalStorage('stateBoard', initialStates.board)
-  const [cellStatuses, setCellStatuses] = useLocalStorage('stateCellStatuses', initialStates.cellStatuses)
+  const [cellStatuses, setCellStatuses] = useLocalStorage(
+    'stateCellStatuses',
+    initialStates.cellStatuses
+  )
   const [currentRow, setCurrentRow] = useLocalStorage('stateCurrentRow', initialStates.currentRow)
   const [currentCol, setCurrentCol] = useLocalStorage('stateCurrentCol', initialStates.currentCol)
-  const [letterStatuses, setLetterStatuses] = useLocalStorage('stateLetterStatuses', initialStates.letterStatuses())
-  const [submittedInvalidWord, setSubmittedInvalidWord] = useLocalStorage('stateSubmittedInvalidWord', initialStates.submittedInvalidWord)
+  const [letterStatuses, setLetterStatuses] = useLocalStorage(
+    'stateLetterStatuses',
+    initialStates.letterStatuses()
+  )
+  const [submittedInvalidWord, setSubmittedInvalidWord] = useLocalStorage(
+    'stateSubmittedInvalidWord',
+    initialStates.submittedInvalidWord
+  )
 
   const [currentStreak, setCurrentStreak] = useLocalStorage('current-streak', 0)
   const [longestStreak, setLongestStreak] = useLocalStorage('longest-streak', 0)
@@ -119,8 +129,11 @@ function App() {
 
   const isValidWord = (word) => {
     if (word.length < 5) return false
-    return true
-    // return words[word.toLowerCase()]
+    const allowedNamesMap = answers.reduce((acc, val) => {
+      acc[val] = true
+      return acc
+    }, {})
+    return { ...words, ...allowedNamesMap }[word.toLowerCase()]
   }
 
   const onEnterPress = () => {
@@ -200,14 +213,19 @@ function App() {
 
       var streak = currentStreak + 1
       setCurrentStreak(streak)
-      setLongestStreak((prev) => streak > prev ? streak : prev)
+      setLongestStreak((prev) => (streak > prev ? streak : prev))
     } else if (gameState === state.playing && currentRow === 6) {
       setGameState(state.lost)
       setCurrentStreak(0)
     }
   }, [
-   cellStatuses, currentRow, gameState, setGameState,
-   currentStreak, setCurrentStreak, setLongestStreak
+    cellStatuses,
+    currentRow,
+    gameState,
+    setGameState,
+    currentStreak,
+    setCurrentStreak,
+    setLongestStreak,
   ])
 
   const updateLetterStatuses = (word) => {
